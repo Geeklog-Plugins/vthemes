@@ -1,0 +1,28 @@
+vThemes ChangeLog
+
+v1.5.2
+  [new] Need jquery plugin to display preview in lightbox
+
+v1.5.1.1
+  - imp - Install script. Clean a hello :) Attribution $pi_version and change $gl_version
+
+v1.5.1
+  - imp - Theme
+  - fix - Number of themes in the block theme's switcher.
+  - new - Description and disable download in theme.ini
+  - new - Online config
+
+v1.0.2
+
+  - fix - Improved HTML to validate as HTML 4.01 Strict
+  - fix - Fixed issue in setting cookie after theme selection
+
+v1.0.1
+
+  - fix - If allow_themes is 0 in Geeklog config.php, no thems would appear
+    in browser.
+  - fix - sorting was too specific, always placing uppercase items on top.
+    now use natural order sort.
+  - fix - now sort the vThemes block array
+
+v1.0.0 - Initial Public Release

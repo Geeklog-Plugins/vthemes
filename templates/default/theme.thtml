@@ -1,0 +1,20 @@
+{# begin {templatelocation} #}
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0px auto;">
+  <tr>
+      <td colspan="2"><h2>{themeTitle}</h2></td>
+  </tr>
+  <tr>
+    <td align="center" style="vertical-align:top; padding:5px 15px 0px 3px;">
+        {themeLightBox}<img {reflection} src="{themeThumbnail}" alt="">{themeLightBoxEnd}
+    </td>
+    <td style="vertical-align:top; padding:0px; width:40%">
+	  <p><small>{by} <a href="{themeURL}">{themeAuthor}</a></small></p>
+	  {themeDescription}
+	  <p><small>{themeUse}</small></p>
+      <p>{themeDownload}{lang_download}{themeDownloadEnd}</p>
+    </td>
+  </tr>
+</table>
+
+{# end {templatelocation} #}

@@ -1,0 +1,12 @@
+{# begin {templatelocation} #}
+
+<p>{message}</p>
+
+<form id="vtswitch" method="post">
+    <select name="gl-usetheme" onchange="this.form.submit()">
+        <option value="">--</option>
+        {select_options}
+    </select>
+</form>
+        
+{# end {templatelocation} #}

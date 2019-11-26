@@ -1,0 +1,27 @@
+{# begin {templatelocation} #}
+
+<div style="padding:15px 10px;"><h1>{title_row}</h1></div>
+<div class="vtupdated">{tmsg}</div>
+<div class="vtheme">
+  <table width="100%" border="0" cellpadding="5" cellspacing="5">
+
+<!-- BEGIN themeRow -->
+  <tr>
+
+  <!-- BEGIN themeColumn -->
+    <td style="vertical-align:top;{tdwidth}">
+    {themeDisplay}
+    </td>
+<!-- END themeColumn -->
+
+  </tr>
+  <tr>
+    <td style="height:2em;">&nbsp;</td>
+  </tr>
+<!-- END themeRow -->
+
+  </table>
+  {bottom_pagination}
+</div>
+
+{# end {templatelocation} #}

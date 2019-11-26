@@ -1,0 +1,214 @@
+vThemes Plugin v1.5.1 Installation and Upgrading Instructions
+
+vThemes follows the standard Geeklog plugins procedure.  Below we will document
+2 methods to install the vThemes files, via FTP and via standard shell access
+to the server.
+
+FTP Installation
+
+If you do not have shell access to your server and can only use an FTP client
+to access your server, follow these instructions.
+
+To install vThemes, or any Geeklog plugin, you will need to un-archive
+the plugin on your local computer. The vThemes distribution will
+automatically create all the proper directories when it is un-archived.
+
+To un-archive a .gz file, you can use later copies of WinZIP, IZarc or WinRAR.
+
+   1. Create a temporary directory on your local hard drive to hold the
+      vThemes files (let's use C:\tmp for our example).
+   2. Open the vthemes-1.5.1-1.5.1.tar.gz file with WinRAR.
+   3. Select Extract All Files and point to the C:\tmp directory as the
+      destination.
+
+Now we should have a local copy of the vThemes Plugin in C:\tmp
+
+The directory should look like this:
+
++tmp\
+    + vthemes\
+             + admin\
+             + docs\
+             + language\
+             + public_html\
+             + templates\
+             + functions.inc
+             +
+			 
+Now that you have a copy on your local hard drive, it is time to FTP up to
+your server.
+
+Start your FTP program, I recommend FileZilla if you do not have a program
+you use already.  FileZilla is free and supports many different operating
+systems (Windows, Linux, etc.).
+
+Connect to your web server with your FTP program.
+
+Our first FTP will be the entire vThemes distribution to your server.
+You will want to use the diagrams below to find the proper directory on your
+server and move the entire c:\tmp\vthemes\ directory to the
+path-to-geeklog/plugins/ directory.
+
+To find the path-to-geeklog you can look in your Geeklog config.php file and
+see what directory is defined in the $_CONF[‘path’] line.
+
+SPECIAL NOTE: For the initial FTP of the vThemes distribution, you will
+want to actually drag the vthemes folder from your local computer to the
+plugins directory on your server.  The remaining FTP’s below you will actually
+drag the files, not the parent directory.
+
+tmp\           path-to-geeklog/
+   |                          |
+   + vthemes\--+              + backups/
+               |              + data/
+               |              + include/
+               |              + language/
+               |              + logs/
+               |              + pdfs/
+               +------------->+ plugins/
+                              + public_html/
+                              + sql/
+                              + system/
+                              + config.php
+
+Next, you will need to make a sub-directory under the public_html directory
+on your server called vthemes. For most FTP programs you can create
+directories by highlighting the parent directory, public_html in this case,
+then right click the mouse, select New Folder and name it vthemes.
+This procedure may be a little different depending on which FTP program you
+are using, check their documentation.
+
+  path-to-geeklog/
+                 |
+                 + backups/
+                 + data/
+                 + include/
+                 + language/
+                 + logs/
+                 + pdfs/
+                 + plugins/
+                 + public_html/
+                              |
+                              + vthemes <--- Make this subdirectory
+                 + sql/
+                 + system/
+                 + config.php
+
+Next you will need to FTP all the files from the
+c:\tmp\vthemes\public_html\* directory to your server.
+Here you will want to select all the files and sub-directories in
+the public_html\ directory, not just the public_html\ folder.
+Follow the diagram below:
+
+tmp\            path-to-geeklog/
+   |                           |
+   + vthemes\                  + backups/
+            |                  + data/
+            + public_html/*-+  + include/
+                               |  + language/
+                               |  + logs/
+                               |  + pdfs/
+                               |  + plugins/
+                               |  + public_html/
+                               |               |
+                               +-------------->+ vthemes/
+                                  + sql/
+                                  + system/
+                                  + config.php
+
+Next, you will need to make a sub-directory under the admin/plugins/
+directory on your server called vthemes.
+
+path-to-geeklog/
+               |
+               + backups/
+               + data/
+               + include/
+               + language/
+               + logs/
+               + pdfs/
+               + plugins/
+               + public_html/
+               |       |
+               |       + admin\
+               |           |
+               |           + plugins\
+               |                    + vthemes <--- Make this subdirectory
+               + sql/
+               + system/
+               + config.php
+
+Next you will need to FTP all the files from the c:\tmp\vthemes\admin\*
+directory to your server. Here you will want to select all the files and
+sub-directories in the admin\ directory, not just the public_html\ folder.
+Follow the map below:
+
+tmp\       path-to-geeklog/
+   |                      |
+   + vthemes\             + backups/
+            |             + data/
+            + admin/---+  + include/
+                       |  + language/
+                       |  + logs/
+                       |  + pdfs/
+                       |  + plugins/
+                       |  + public_html/
+                       |               + admin/
+                       |                      + plugins/
+                       +---------------------------->  + vthemes/
+                          + sql/
+                          + system/
+                          + config.php
+
+Congratulations!  You should now have all the files uploaded to your server
+and you are ready to skin to the Online Installation step below.
+
+Standard Shell Access Installation
+
+   1. Uncompress the vThemes plugin archive while in the
+      path-to-geeklog/plugins directory. The archive will create a directory
+      called vthemes.
+
+   2. In your public_html directory, create a directory called vthemes.
+
+   3. Under public_html/admin/plugins/ directory, create a directory
+      called vthemes.
+
+   4. Change to your path-to-geeklog/plugins/vthemes directory.
+
+   5. Copy the files in the admin directory to the admin/plugins/vthemes
+      directory you created in step 3.
+
+   6. Copy the files in the public_html directory to the
+      public_html/vthemes directory you created in step 3.
+
+Online Installation
+
+Now that you have the files loaded on your server, it is time to actually
+perform the vThemes installation into Geeklog.
+
+   1. Go to the plugin administration page. The vThemes plugin should
+      show up with a link to install it. Click this link. The install page
+      will tell you if it was successful or not. If not, examine the Geeklog
+      error.log in path-to-geeklog/logs/ to see what the problem was. Fix the
+      problem and re-install.
+
+Standard Upgrade Process
+
+   1. BACK UP YOUR EXISTING ENVIRONMENT!
+
+   2. Refer to the installation instructions for New Installations for
+      detailed instructions on uploading the new vThemes distribution to
+      your server.
+
+      If you are prompted to overwrite existing files, be sure to answer Yes.
+
+   3. Go to the Geeklog Plugins Menu (from the Geeklog Administrator's menu).
+
+   4. Select the vThemes plugin.
+
+   5. You should have an UPDATE button, select it.
+
+   6. If all goes well, the upgrade should be complete. If there were errors,
+      please review your logs/error.log and correct any issues and try the
+      UPDATE again.
