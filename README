@@ -9,7 +9,7 @@ For Theme Authors:
 vThemes will look for the following files in the theme directory:
 
 	** Replace themename with the actual name of the theme**
-	- themename.png or themenage.jpg - A screen shot of the theme (usually 800 pixels wide or more)
+	- themename.png or themename.jpg - A screen shot of the theme (usually 800 pixels wide or more)
 	** **
 	- theme.ini - This is an ini file with information about the theme.
 
