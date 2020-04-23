@@ -17,7 +17,7 @@ To un-archive a .gz file, you can use later copies of WinZIP, IZarc or WinRAR.
 
    1. Create a temporary directory on your local hard drive to hold the
       vThemes files (let's use C:\tmp for our example).
-   2. Open the vthemes-1.6.0-2.2.1.tar.gz file with WinRAR.
+   2. Open the vthemes-1.6.1-2.2.1.tar.gz file with WinRAR.
    3. Select Extract All Files and point to the C:\tmp directory as the
       destination.
 

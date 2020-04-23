@@ -44,7 +44,7 @@ function plugin_autoinstall_vthemes($pi_name)
     $info = array(
         'pi_name'         => $pi_name,
         'pi_display_name' => $pi_display_name,
-        'pi_version'      => '1.6.0',
+        'pi_version'      => '1.6.1',
         'pi_gl_version'   => '2.2.1',
         'pi_homepage'     => 'https://github.com/Geeklog-Plugins/vthemes'
     );

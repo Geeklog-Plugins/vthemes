@@ -195,6 +195,13 @@ function plugin_upgrade_vthemes()
 
                 $current_version = '1.6.0';
                 break;
+			
+			case '1.6.0':			
+                $current_version = '1.6.1';
+                break;
+
+			default:
+				$done = true;				
         }
     }
 
