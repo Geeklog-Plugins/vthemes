@@ -110,6 +110,12 @@ if ( $total_themes > 0 ) {
 
 	$T->set_block('page', 'themeColumn', 'tColumn');
 	$T->set_block('page', 'themeRow', 'tRow');
+	
+	// Have to make sure start on right theme in array for current page so loop through if needed
+	for ($i = 0; $i < $start; $i++) {
+		$theme = next($themes);
+	}
+	
 
     for ( $i = $start; $i < ($start + $items_per_page ); $i += $columns_per_page ) {
         for ($j = $i; $j < ($i + $columns_per_page); $j++) {
