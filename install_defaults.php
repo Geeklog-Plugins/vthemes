@@ -74,16 +74,16 @@ $_VT_DEFAULT['hidevthemesmenu']    = 0;
  *
  */
 
-$_VT_DEFAULT['max_width_preview'] 	= '200';
+$_VT_DEFAULT['max_width_preview'] 	= '480';
 $_VT_DEFAULT['columns'] 			= 1;
-$_VT_DEFAULT['rows']    			= 15;
+$_VT_DEFAULT['rows']    			= 4;
 $_VT_DEFAULT['disable_use_theme'] 	= 0;
 $_VT_DEFAULT['disable_download'] 	= 0;
 
 /*
  * Visual Tweaks
  */
- $_VT_DEFAULT['leftblocks']		= '0';
+ $_VT_DEFAULT['leftblocks']		= '1';
 
 // vthemes Block
 $_VT_DEFAULT['block_isleft'] = 0;
