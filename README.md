@@ -33,10 +33,10 @@ Geeklog Homepage:
 https://www.geeklog.net
 
 vThemes Plugin Homepage:
-https://github.com/Geeklog-Plugins/autotags
+https://github.com/Geeklog-Plugins/vthemes
 
 To find the latest releases see:
-https://github.com/Geeklog-Plugins/autotags/releases
+https://github.com/Geeklog-Plugins/vthemes/releases
 
 To request a feature or report an issue see: 
-https://github.com/Geeklog-Plugins/autotags/issues
+https://github.com/Geeklog-Plugins/vthemes/issues
