@@ -1,0 +1,30 @@
+{# begin {templatelocation} #}
+
+<h1>{title_row}</h1>
+
+<div class="uk-alert-primary" uk-alert>{tmsg}</div>
+
+<div class="uk-overflow-container">
+  <table class="uk-table">
+
+<!-- BEGIN themeRow -->
+  <tr>
+
+<!-- BEGIN themeColumn -->
+    <td style="vertical-align:top;{tdwidth} border: 0px;">
+    {themeDisplay}
+    </td>
+<!-- END themeColumn -->
+
+  </tr>
+  <tr>
+    <td style="border: 0px;">&nbsp;</td>
+  </tr>
+<!-- END themeRow -->
+
+  </table>
+</div>
+
+{bottom_pagination}
+
+{# end {templatelocation} #}

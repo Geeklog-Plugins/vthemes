@@ -3,12 +3,14 @@ vThemes Plugin ChangeLog
 v1.6.0 (Released 2020-04-23)
   - [Info] Requires Geeklog 2.2.1 or higher
   - [Info] Requires PHP v5.6.4 or higher (including PHP v7)
+  - [Security] Removed timthumb due to security concerns with image resizing php script
   - [Improvement] Now uses information directly from theme config so removed .ini file requirement
   - [Feature] Added multiple theme template support
   - [Feature] More information is displayed in Visual Switcher about theme (if available)
   - [Feature] Actual theme name used now in Visual Switcher Block
   - [Bug] In Visual Switcher fixed multiple blank rows at bottom
   - [Bug] Other misc. bug fixes
+  - [Bug] Removed broken jQuery lightbox code. Denim theme will use uikit lightbox
   
 v1.5.2
   - [feature] Need jQuery plugin to display preview in lightbox

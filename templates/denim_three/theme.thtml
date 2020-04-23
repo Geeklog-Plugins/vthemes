@@ -1,23 +1,24 @@
 {# begin {templatelocation} #}
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0px auto;">
+<table class="uk-table">
   <tr>
       <td colspan="2"><h2>{themeTitle}</h2></td>
   </tr>
   <tr>
-    <td align="center" style="vertical-align:top; padding:5px 15px 0px 3px;">
+    <td class="uk-width-3-5 uk-text-center">
 		{!if themePreviewImage}
-		<a href="{themePreviewImage}" target="_blank">
-		<img src="{themePreviewImage}" width="{previewImageWidth}" alt="" title="{themeTitle}">
+		<div uk-lightbox="animation: slide">
+		<a href="{themePreviewImage}" data-caption="{themeTitle}">
+		<img src="{themePreviewImage}" width="{previewImageWidth}" alt="">
 		</a>
 		{!else}
 		<img src="/vthemes/images/nopreview.png" width="{previewImageWidth}" alt="" title="{themeTitle}">
 		{!endif}
     </td>
-    <td style="vertical-align:top; padding:0px; width:40%">
+    <td class="uk-width-2-5 uk-text-left">
 	  <small>
 	  
-	  <dl>
+	  <dl class="uk-description-list">
 		<dt>{lang_theme}:</dt>
 		<dd>{themeTitle}{!if themeVersion} - {lang_version}: {themeVersion}{!endif}</dd>
 		<dt>{lang_requires}:</dt>
@@ -41,24 +42,24 @@
 	  </dl>
 	  
 	  </small>
-	  
-	  {!if themeUse}
-	  <form name="{themeId}" method="post" action="{php_self}">
-		<input type="hidden" name="gl-usetheme" value="{themeFolder}">
-		<button type="submit" name="use" value="{lang_use_theme}">{lang_use_theme}</button>
-	  </form>
-	  {!if themeDownloadUrl}
-	  <br>
-	  {!endif}
-	  {!endif}
-	  
-	  {!if themeDownloadUrl}
-	  <form action="{themeDownloadUrl}">
-		<button type="submit" >{lang_download}</button>
-	  </form>	  
-	  {!endif}
     </td>
   </tr>
+  {!!if {themeUse} != '' OR {themeDownloadUrl} != '' !!}
+  <tr>
+	  <td colspan="2" class="uk-text-center">
+		  <form name="{themeId}" method="post" action="{php_self}" class="uk-form">
+			<input type="hidden" name="gl-usetheme" value="{themeFolder}">
+			{!if themeUse}
+			<button type="submit" name="use" value="{lang_use_theme}" class="uk-button uk-button-primary uk-text-nowrap">{lang_use_theme}</button>
+			{!endif}
+			
+			{!if themeDownloadUrl}
+			<a href="{themeDownloadUrl}" class="uk-button uk-button-default uk-text-nowrap" >{lang_download}</a>
+			{!endif}
+		  </form>
+	  </td>
+  </tr>
+  {!endif}
 </table>
 
 {# end {templatelocation} #}

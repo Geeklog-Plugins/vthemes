@@ -304,70 +304,156 @@ function phpblock_vthemeswitcher()
         DB_query("UPDATE {$_TABLES['users']} SET theme='$usetheme' WHERE uid = {$_USER['uid']}");
     }
 
-	if ( SEC_inGroup('Root')) {
+	if (SEC_inGroup('Root') || SEC_hasRights('vthemes.admin')) {
 		$admin = 1;
 	} else {
 		$admin = 0;
 	}
 
-	$glThemes = COM_getThemes();
-	natcasesort($glThemes);
-	$x = 0;
-    $themes = array();
-    if (!isset($_VT_CONF['exclude'])) {
-        $_VT_CONF['exclude'] = '';
-    }
-	for ($i=0; $i < count($glThemes); $i++ )
-	{
-        if ($_VT_CONF['exclude'] == "") {
-			$exclude= array ("", "");
-			 if ( !in_array(current($glThemes),$exclude) || $admin ) {
-                $themes[$x] = current($glThemes);
-                $x++;
-            }
-        } else {
-			if (!in_array(current($glThemes), $_VT_CONF['exclude']) || $admin ) {
-                $themes[$x] = current($glThemes);
-                $x++;
-            }
-        }
-		next($glThemes);
-	}
-
-    if ($x == 1) {
-        return 'Sorry, there is only one theme installed on this system';
-    }
-
     $T = COM_newTemplate(CTL_plugin_templatePath('vthemes'));
     $T->set_file('block', 'block.thtml');
 
-    $T->set_var('message', sprintf($LANG_VT01['vt_block'],$x, $_CONF['site_url'] . '/vthemes/index.php'));
+	// *************************************************************
+	// Once Geeklog 2.2.2 is released replace with COM_getThemes
+	$themes = vThemes_COM_getThemes(false, true, true);
+	
+	$T->set_var('message', sprintf($LANG_VT01['vt_block'], count($themes), $_CONF['site_url'] . '/vthemes/index.php'));
 
-    $select_options = '';
-    for ($i = 1; $i <= count($themes); $i++) {
-        $select_options .= '<option value="' . current($themes) . '"';
-        if ($usetheme == current($themes)) {
-            $select_options .= ' selected="SELECTED"';
-        }
-
-		// Get actual Theme name
-		$themeName = current($themes);
-		$func = 'theme_config_' . $themeName;
-		require_once $_CONF['path_layout'] . 'functions.php';
-		if (function_exists($func)) { // Function is required for a theme but lets check just in case
-			$theme_config = $func();		
-			if (!empty(trim($theme_config['theme_name']))) {
-				$themeName = $theme_config['theme_name'];
+	$items = '';
+	foreach ($themes as $key => $theme) {
+		if (isset($_VT_CONF['exclude']) && is_array($_VT_CONF['exclude'])) {
+			if (!in_array($key, $_VT_CONF['exclude']) || $admin ) {
+				$excluded = false;
+			} else {
+				$excluded = true;
 			}
-		}		
+		} else {
+			$excluded = false;
+		}
 		
-        $select_options .= '>' . $themeName . '</option>';
-        next($themes);
-    }
-    $T->set_var('select_options', $select_options);
+		if (!$excluded) {
+			$items .= '<option value="' . $key . '"';
+			if ($usetheme == $key) {
+				$items .= ' selected="selected"';
+			}
+
+			$items .= '>' . $theme['theme_name'] . '</option>' . LB;
+		}
+	}
+	
+	$T->set_var('select_options', $items);
 
     $retval = $T->finish($T->parse('output', 'block'));
 
     return $retval;
 }
+
+// ********************************************************************************************************************************
+// NOTE: Once Geeklog 2.2.2 released remove these functions and replace calls with COM_getThemeInfo and COM_getThemes
+// This is done to support Geeklog 2.2.1 which these functions have not been updated or exist
+
+/**
+ * Gets all installed themes
+ * Returns a list of all the directory names in $_CONF['path_themes'], i.e.
+ * a list of all the theme names.
+ *
+ * @param    boolean $all if true, return all themes even if users aren't allowed to change their default themes
+ * @param    boolean $valid if true, return all valid themes only
+ * @param    boolean $info if true, return all theme config info as well
+ * @return   array        All installed themes. If $info true then theme folder name is used as an index for the array followed by the configuration (as an array)
+ */
+function vThemes_COM_getThemes($all = false, $valid = true, $info = false)
+{
+    global $_CONF;
+
+    $index = 1;
+    $themes = array();
+
+    // If users aren't allowed to change their theme then only return the default theme
+
+    if (($_CONF['allow_user_themes'] == 0) && !$all) {
+        if ($info) {
+            $themes[$dir] = vThemes_COM_getThemeInfo($_CONF['theme']);
+        } else {
+            $themes[$index] = $_CONF['theme'];
+        }
+    } else {
+        $fd = opendir($_CONF['path_themes']);
+
+        while (($dir = @readdir($fd)) !== false) {
+            if (is_dir($_CONF['path_themes'] . $dir) && ($dir !== '.') && ($dir !== '..') &&
+                ($dir !== 'CVS') && (substr($dir, 0, 1) !== '.')
+            ) {
+                clearstatcache();
+                if ($valid) {
+                    if (COM_validateTheme($dir)) {
+                        if ($info) {
+                            $themes[$dir] = vThemes_COM_getThemeInfo($dir);
+                        } else {
+                            $themes[$index] = $dir;
+                        }
+                    }
+                } else {
+                    if ($info) {
+                        $themes[$dir] = vThemes_COM_getThemeInfo($dir);
+                    } else {
+                        $themes[$index] = $dir;
+                    }
+                }
+                $index++;
+            }
+        }
+    }
+
+    return $themes;
+}
+
+/**
+ * Gets theme info if found
+ *
+ * @param    string theme   id of theme (which is also the directory name that should be located in the layout folder)
+ * @return   array        All installed themes
+ */
+function vThemes_COM_getThemeInfo($theme)
+{
+    global $_CONF;
+
+    $theme_config = array();
+
+    if (!empty($theme)) {
+        $temp_path_layout = $_CONF['path_themes'] . $theme . '/';
+        if (file_exists($temp_path_layout . 'functions.php')) {
+            require_once $temp_path_layout . 'functions.php';
+            $func = 'theme_config_' . $theme;
+            if (is_callable($func)) {
+                $theme_config = $func();
+
+                // Make sure theme name exists else could really cause problems
+                if (isset($theme_config['theme_name'])) {
+                    if (empty(trim($theme_config['theme_name']))) {
+                        $theme_config['theme_name'] = $theme;
+                    }
+                } else {
+                    $theme_config['theme_name'] = $theme;
+                }
+
+                $currentThemePath = $_CONF['path_themes'] . $theme . '/';
+                $previewImage = $theme . '.png';
+                if (!file_exists($currentThemePath . $previewImage)) {
+                    $previewImage = $theme . '.jpg';
+                    if (!file_exists($currentThemePath . $previewImage)) {
+                        $previewImage = '';
+                    }
+                }
+                if (!empty($previewImage)) {
+                    $theme_config['theme_preview_image'] = $previewImage;
+                }
+            }
+        }
+    }
+
+    return $theme_config;
+}
+
+
 ?>

@@ -31,14 +31,13 @@ require_once('../lib-common.php');
 $T = COM_newTemplate(CTL_plugin_templatePath('vthemes'));
 $T->set_file('page','tchooser.thtml');
 
-// No need to worry about if theme changed as lib-common figures this out already
-$tmsg = $LANG_VT01['active']; 
-
-$T->set_var('tmsg',$tmsg);
-
 if (isset($_GET['page'])) {
-    $page = COM_applyFilter($_GET['page'],true);
+    $page = COM_applyFilter($_GET['page'], true);
+	if ($page < 1) {
+		COM_handle404($_CONF['site_url'] . '/vthemes/index.php');
+	}
 } else {
+	// Only time page can be 0 if it is not set
     $page = 0;
 }
 if ( $page != 0 ) {
@@ -73,21 +72,24 @@ if ( SEC_inGroup('Root')) {
 	$admin = 0;
 }
 
-$glThemes = COM_getThemes(1);
-natcasesort($glThemes);
+// Get Current Theme name for page
+// *************************************************************
+// Once Geeklog 2.2.2 is released replace with COM_getThemeInfo
+$theme = vThemes_COM_getThemeInfo($_CONF['theme']);
+$tmsg = sprintf($LANG_VT01['active'], $theme['theme_name']);
+unset($theme);
+$T->set_var('tmsg', $tmsg);
 
-$x = 0;
-for ($i=0; $i < count($glThemes); $i++ ) {
-	$themes[$x] = current($glThemes);
-	$x++;
-	next($glThemes);
-}
+// Retrieve all valid themes
+// *************************************************************
+// Once Geeklog 2.2.2 is released replace with COM_getThemes
+$themes = vThemes_COM_getThemes(false, true, true);
 
 $total_themes = count($themes);
 $total_pages = ceil($total_themes/($items_per_page));
 
 if ( $page >= $total_pages ) {
-    $page = $total_pages - 1;
+	COM_handle404($_CONF['site_url'] . '/vthemes/index.php');
 }
 
 $start = $page * $items_per_page;
@@ -111,8 +113,7 @@ if ( $total_themes > 0 ) {
 
     for ( $i = $start; $i < ($start + $items_per_page ); $i += $columns_per_page ) {
         for ($j = $i; $j < ($i + $columns_per_page); $j++) {
-            if ($j >= $total_themes)
-            {
+            if ($j >= $total_themes) {
                 $k = ($i+$columns_per_page) - $j;
                 $m = $k % $columns_per_page;
                 $T->set_var(array(
@@ -123,107 +124,93 @@ if ( $total_themes > 0 ) {
                 $T->parse('tColumn','themeColumn',true);
                 break;
             }
-            $themeOffset = $j;
+            
+			$themeFolder = key($themes);
+			$theme = current($themes);
+			
 			$V = COM_newTemplate(CTL_plugin_templatePath('vthemes'));
 			$V->set_file('theme','theme.thtml');
 
-			$previewImageFull = '/layout/' . $themes[$themeOffset] . '/' . $themes[$themeOffset] . '.png';
-			if ( !file_exists($_CONF['path_html'] . $previewImageFull) ) {
-				$previewImageFull = '/layout/' . $themes[$themeOffset] . '/' . $themes[$themeOffset] . '.jpg';
-				if ( !file_exists($_CONF['path_html'] . $previewImageFull) ) {
-					$previewImageFull = '';
-				}
+			if (isset($theme['theme_preview_image']) AND !empty($theme['theme_preview_image'])) {
+				$previewImage = "/layout/$themeFolder/" . $theme['theme_preview_image'];
+			} else {
+				$previewImage = '';
 			}
-
-			$previewImage = '/layout/' . $themes[$themeOffset] . '/' . $themes[$themeOffset] . '.png';
-
-			if ( !file_exists($_CONF['path_html'] . $previewImage) ) {
-				$previewImage = '/layout/' . $themes[$themeOffset] . '/' . $themes[$themeOffset] . '.jpg';
-				if ( !file_exists($_CONF['path_html'] . $previewImage) ) {
-					if ( $previewImageFull != '' ) {
-						$previewImage = $previewImageFull;
-					} else {
-						$previewImage = '/vthemes/images/nopreview.png';
-					}
-				}
-			}
-
-			$previewImageWidth = $_VT_CONF['max_width_preview'];
-            $previewImageHeight = 0;
-
-			//
-			// process theme ini file, if it exists...
-			//
-			unset($themeData);
-			$themeData = array();
-			$themeData = @parse_ini_file ( $_CONF['path_html'] . '/layout/' . $themes[$themeOffset] . '/' . 'theme.ini' );
-			$themeAuthor	  = '';
-			$themeURL		  = '';
-			$themeDownload    = '';
-			$themeDownloadEnd = '';
-			$lang_download	  = '';
+			
+			// Retrieve theme config options
 			$themeDescription = '';
-			$themeName        = $themeData['name'];
-
-			if ( isset ($themeData['name']) && $themeData['name'] == $themes[$themeOffset] ) {
-			    $themeName	      = (isset($themeData['display_name']) ? $themeData['display_name'] : $themeData['name']);
-				$themeAuthor	  = (isset($themeData['author']) ? $themeData['author'] : '');
-				$themeURL		  = (isset($themeData['url']) ? $themeData['url'] : '');
-				$themeDownload    = (isset($themeData['download']) ? '<a href="' . $themeData['download'] . '">' : '');
-				$themeDownloadEnd = (isset($themeData['download']) ? '</a>' : '');
-				$lang_download	  = (isset($themeData['download']) ? $LANG_VT00['download_theme'] : '');
-				if ( $themeData['download'] == "#" ) {
-				$lang_download = '';
-				$themeDownload = '';
-				$themeDownloadEnd = ''; }
-				$themeDescription = (isset($themeData['description']) ? $themeData['description'] : '');
-			} else {
-			    $themeName = $themes[$themeOffset];
+			$themeDescNoHTML  = '';
+			$themeHomepage	  = '';
+			$themeAuthor	  = '';
+			$themeAuthorUrl	  = '';
+			$themeDownloadUrl = '';
+			$themeVersion	  = '';
+			$themeGLVersion	  = '';
+			$themeCopyright	  = '';
+			$themeLicense	  = '';			
+			
+				
+			$themeName	      = (isset($theme['theme_name']) ? $theme['theme_name'] : $themeFolder);
+			
+			$themeDescription = (isset($theme['theme_description']) ? $theme['theme_description'] : '');
+			if (!empty(trim($themeDescription))) {
+				$themeDescNoHTML = preg_match('/<.*>/', $themeDescription); // Will = 0 if no HTML tags
+				// Update variable to now indicate if html found or not
+				if ($themeDescNoHTML > 0) {
+					$themeDescNoHTML = '';
+				} else {
+					$themeDescNoHTML = 1; 
+				}
+				if ($themeDescNoHTML) {
+					$themeDescription = COM_nl2br($themeDescription);
+				}
 			}
-
-			if ( $_VT_CONF['disable_download'] == 1 ) {
-				$lang_download = '';
-				$themeDownload = '';
-				$themeDownloadEnd = '';
+			
+			$themeHomepage	  = (isset($theme['theme_homepage']) ? $theme['theme_homepage'] : '');
+			
+			$themeAuthor	  = (isset($theme['theme_author']) ? $theme['theme_author'] : '');
+			$themeAuthorUrl	  = (isset($theme['theme_author_url']) ? $theme['theme_author_url'] : '');
+			
+			if ($_VT_CONF['disable_download'] != 1) {
+				$themeDownloadUrl 	  = (isset($theme['theme_download_url']) ? $theme['theme_download_url'] : '');
 			}
+			
+			$themeVersion   = (isset($theme['theme_version']) ? $theme['theme_version'] : '');
+			$themeGLVersion   = (isset($theme['theme_gl_version']) ? $theme['theme_gl_version'] : '');
+			$themeCopyright   = (isset($theme['theme_copyright']) ? $theme['theme_copyright'] : '');
+			$themeLicense     = (isset($theme['theme_license']) ? $theme['theme_license'] : '');
 
 			$V->set_var(array(
-				'by'                => $LANG_VT00['by'],
+				'lang_author'           => $LANG_VT00['author'],
+				'lang_use_theme'    => $LANG_VT00['use_theme'],
+				'lang_theme'		=> $LANG_VT00['theme'],
+				'lang_version'		=> $LANG_VT00['version'],
+				'lang_requires'		=> $LANG_VT00['requires'],
+				'lang_copyright'	=> $LANG_VT00['copyright'],
+				'lang_license'		=> $LANG_VT00['license'],
+				'lang_description'	=> $LANG_VT00['description'],
+				
+				'php_self'	    	=> $_SERVER['PHP_SELF'],
+				'themeId'	    	=> 'theme' . $i,
+				'themeFolder'    	=> $themeFolder,
+				'themeTitle'	    => $themeName,
+				'themeDescription'  => $themeDescription,
+				'themeDescNoHTML'   => $themeDescNoHTML,
+				'themeHomepage'		=> $themeHomepage,
 				'themeAuthor'		=> $themeAuthor,
-				'themeURL'			=> $themeURL,
-				'themeDownload'		=> $themeDownload,
-				'themeDownloadEnd' 	=> $themeDownloadEnd,
-				'lang_download' 	=> $lang_download,
+				'themeAuthorUrl'	=> $themeAuthorUrl,
+				'themeDownloadUrl'	=> $themeDownloadUrl,
+				'lang_download' 	=> $LANG_VT00['download_theme'],
+				'themeVersion'		=> $themeVersion,
+				'themeGLVersion'	=> $themeGLVersion,
+				'themeCopyright'	=> $themeCopyright,
+				'themeLicense'		=> $themeLicense,
+				
+				'themeUse'         => ( $_VT_CONF['disable_use_theme'] != 1 ? '1' : '') ,
+                'themePreviewImage'   => $previewImage,
+				'previewImageWidth' => $_VT_CONF['max_width_preview'], 
 			));
-
-			if ($themeAuthor == '') $V->set_var('by','');
-
-			$borderWidth = $previewImageWidth+15;
-
-			$V->set_var(array(
-				'themeTitle'	   => $themeName,
-				'themeUse'         => ( $_VT_CONF['disable_use_theme'] != 1 ? '<form name="theme' . $i . '" method="post" action="' . $_SERVER['PHP_SELF'] . '"><input type="hidden" name="gl-usetheme" value="' . $themes[$themeOffset] . '"><input type="submit" name="use" value="' . $LANG_VT00['use_theme'] . '"></form>' : '') ,
-				//'themeThumbnail'   => $_CONF['site_url'] . '/vthemes/timthumb.php?src=' . $_CONF['site_url'] . $previewImage . '&amp;w=' . $_VT_CONF['max_width_preview'] . '&amp;zc=1&amp;q=90',
-                'themeThumbnail'   => $_CONF['site_url'] . $previewImage,
-				'themeLigtBox'     => '<a class="lightbox" href="' . $_CONF['site_url'] . '/vthemes/timthumb.php?src=' .  $_CONF['site_url'] . $previewImageFull . '&amp;w=' . (4*$_VT_CONF['max_width_preview']) . '&amp;zc=1&amp;q=90' . '" title="' . $themes[$themeOffset] . '">',
-				'borderWidth'      => $previewImageWidth + 15,
-				'row_height'	   => $previewImageHeight + 40,
-      			'themeDescription' => $themeDescription,
-			));
-			if ( $previewImageFull != '' ) {
-				$previewImageFullSize = @getimagesize($_CONF['path_html'] . $previewImageFull);
-			} else {
-				$previewImageFullSize = false;
-			}
-
-			if ( $previewImageFullSize != false ) {
-				$V->set_var('themeLightBox', '<a class="lightbox" href="' . $_CONF['site_url'] . '/vthemes/timthumb.php?src=' .  $_CONF['site_url'] . $previewImageFull . '&amp;w=' . (800) . '&amp;zc=1&amp;q=90' . '" title="' . $themes[$themeOffset] . '">');
-				$V->set_var('themeLightBoxEnd','</a>');
-			} else {
-				$V->set_var('themeLightBox','');
-				$V->set_var('themeLightBoxEnd','');
-			}
-
+			
 			$V->parse('output','theme');
 			$themeDisplay = $V->finish($V->get_var('output'));
 
@@ -232,9 +219,15 @@ if ( $total_themes > 0 ) {
 				'tdwidth'       => $tdwidth,
             ));
 			$T->parse('tColumn','themeColumn',true);
+			
+			$theme = next($themes);
 		}
         $T->parse('tRow','themeRow',true);
         $T->set_var('tColumn','');
+		
+		if ($j >= $total_themes) {
+			break;
+		}
 	}
 }
 

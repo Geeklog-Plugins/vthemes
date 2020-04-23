@@ -6,7 +6,13 @@
   </tr>
   <tr>
     <td class="uk-width-6-10 uk-text-center" style="border: 0px;">
-        {themeLightBox}<img {reflection} src="{themeThumbnail}" alt="">{themeLightBoxEnd}
+		{!if themePreviewImage}
+		<a href="{themePreviewImage}" data-uk-lightbox="{group:'theme-previews'}">
+		<img src="{themePreviewImage}" width="{previewImageWidth}" alt="" title="{themeTitle}" class="uk-thumbnail">
+		</a>
+		{!else}
+		<img src="/vthemes/images/nopreview.png" width="{previewImageWidth}" alt="" title="{themeTitle}" class="uk-thumbnail">
+		{!endif}
     </td>
     <td class="uk-width-4-10 uk-text-left" style="border: 0px;">
 	  <small>
