@@ -54,11 +54,17 @@ $LANG_VT00 = array (
     'use_theme'			=> 'Use Theme',
     'vtheme_header'		=> 'Visual Theme Switcher',
     'download_theme'	=> 'Download Theme',
-    'by'				=> 'Author:'
+    'author'			=> 'Author',
+	'theme'				=> 'Theme',
+	'version'			=> 'Version',
+	'requires'			=> 'Requires',
+	'copyright'			=> 'Copyright',
+	'license'			=> 'License', 
+	'description'		=> 'Description'
 );
 
 $LANG_VT01 = array(
-	'active'			=> 'Current Active Theme: <em>' . $_CONF['theme'] . '</em>',
+	'active'			=> 'Current Active Theme: <em>%s</em>',
 	'vt_block'			=> 'Test out available themes by selecting from one of the %d available themes or give the <a href="%s">Visual Switcher</a> a try:<br />',
 	'use_permanently'	=> 'Use Permanently'
 );

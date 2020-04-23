@@ -1,7 +1,17 @@
-vThemes ChangeLog
+vThemes Plugin ChangeLog
 
+v1.6.0 (Released 2020-04-23)
+  - [Info] Requires Geeklog 2.2.1 or higher
+  - [Info] Requires PHP v5.6.4 or higher (including PHP v7)
+  - [Improvement] Now uses information directly from theme config so removed .ini file requirement
+  - [Feature] Added multiple theme template support
+  - [Feature] More information is displayed in Visual Switcher about theme (if available)
+  - [Feature] Actual theme name used now in Visual Switcher Block
+  - [Bug] In Visual Switcher fixed multiple blank rows at bottom
+  - [Bug] Other misc. bug fixes
+  
 v1.5.2
-  [new] Need jquery plugin to display preview in lightbox
+  - [feature] Need jQuery plugin to display preview in lightbox
 
 v1.5.1.1
   - imp - Install script. Clean a hello :) Attribution $pi_version and change $gl_version
@@ -13,14 +23,11 @@ v1.5.1
   - new - Online config
 
 v1.0.2
-
   - fix - Improved HTML to validate as HTML 4.01 Strict
   - fix - Fixed issue in setting cookie after theme selection
 
 v1.0.1
-
-  - fix - If allow_themes is 0 in Geeklog config.php, no thems would appear
-    in browser.
+  - fix - If allow_themes is 0 in Geeklog config.php, no themes would appear in browser.
   - fix - sorting was too specific, always placing uppercase items on top.
     now use natural order sort.
   - fix - now sort the vThemes block array

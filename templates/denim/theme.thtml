@@ -1,0 +1,58 @@
+{# begin {templatelocation} #}
+
+<table class="uk-table">
+  <tr>
+      <td colspan="2" style="border: 0px;"><h2>{themeTitle}</h2></td>
+  </tr>
+  <tr>
+    <td class="uk-width-6-10 uk-text-center" style="border: 0px;">
+        {themeLightBox}<img {reflection} src="{themeThumbnail}" alt="">{themeLightBoxEnd}
+    </td>
+    <td class="uk-width-4-10 uk-text-left" style="border: 0px;">
+	  <small>
+	  
+	  <dl class="uk-description-list-horizontal">
+		<dt>{lang_theme}:</dt>
+		<dd>{themeTitle}{!if themeVersion} - {lang_version}: {themeVersion}{!endif}</dd>
+		<dt>{lang_requires}:</dt>
+		<dd>Geeklog {themeGLVersion}</dd>
+		{!if themeCopyright}
+		<dt>{lang_copyright}:</dt>
+		<dd>{themeCopyright}</dd>
+		{!endif}
+		{!if themeLicense}
+		<dt>{lang_license}:</dt>
+		<dd>{themeLicense}</dd>
+		{!endif}
+		{!if themeAuthor}
+		<dt>{lang_author}:</dt>
+		<dd>{!if themeAuthorUrl}<a href="{themeAuthorUrl}" target="_blank">{themeAuthor}</a>{!else}{themeAuthor}{!endif}</dd>
+		{!endif}
+		{!if themeDescription}
+		<dt>{lang_description}:</dt>
+		<dd>{themeDescription}</dd>
+		{!endif}
+	  </dl>
+	  
+	  </small>
+    </td>
+  </tr>
+  {!!if {themeUse} != '' OR {themeDownloadUrl} != '' !!}
+  <tr>
+	  <td colspan="2" class="uk-text-center" style="border: 0px;">
+		  <form name="{themeId}" method="post" action="{php_self}" class="uk-form">
+			<input type="hidden" name="gl-usetheme" value="{themeFolder}">
+			{!if themeUse}
+			<button type="submit" name="use" value="{lang_use_theme}" class="uk-button uk-button-primary uk-text-nowrap">{lang_use_theme}</button>
+			{!endif}
+			
+			{!if themeDownloadUrl}
+			<a href="{themeDownloadUrl}" class="uk-button uk-button-default uk-text-nowrap" >{lang_download}</a>
+			{!endif}
+		  </form>
+	  </td>
+  </tr>
+  {!endif}
+</table>
+
+{# end {templatelocation} #}

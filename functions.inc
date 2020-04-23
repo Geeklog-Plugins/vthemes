@@ -349,7 +349,19 @@ function phpblock_vthemeswitcher()
         if ($usetheme == current($themes)) {
             $select_options .= ' selected="SELECTED"';
         }
-        $select_options .= '>' . current($themes) . '</option>';
+
+		// Get actual Theme name
+		$themeName = current($themes);
+		$func = 'theme_config_' . $themeName;
+		require_once $_CONF['path_layout'] . 'functions.php';
+		if (function_exists($func)) { // Function is required for a theme but lets check just in case
+			$theme_config = $func();		
+			if (!empty(trim($theme_config['theme_name']))) {
+				$themeName = $theme_config['theme_name'];
+			}
+		}		
+		
+        $select_options .= '>' . $themeName . '</option>';
         next($themes);
     }
     $T->set_var('select_options', $select_options);

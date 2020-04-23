@@ -1,27 +1,16 @@
 vThemes v1.6.0 Plugin README
 
-vThemes is a Visual Theme Switcher / Browser for Geelog v2.2.1 or higher.
+vThemes is a Visual Theme Switcher and Browser for Geeklog v2.2.1 or higher.
 
-For detailed installation and usage documentation, please refer to /docs
+For detailed installation and usage documentation, please refer to the /docs
+directory.
 
-For Theme Authors:
+For Theme Authors who want to support vThemes:
 
-vThemes will look for the following files in the theme directory:
+vThemes will look for the following file in the theme directory:
+  - themefoldername.png or themefoldername.jpg - This is a screen shot 
+	of the theme (usually 800 pixels wide or more)
 
-	** Replace themename with the actual name of the theme**
-	- themename.png or themename.jpg - A screen shot of the theme (usually 800 pixels wide or more)
-	** **
-	- theme.ini - This is an ini file with information about the theme.
-
-	; Sample ini File
-	;
-	[theme]
-	name = "purepro"
-	display_name = "Purepro base 1.8.0"
-	author = "Some Name"
-	url = "http://www.geeklog.fr"
-	description = "Purepro is a theme with many faces and online customizations."
-
-	;To disable download insert # like this download = "#"
-	download = "http://www.example.com/cms/filemgmt/index.php?id=18"
-
+All other information about the theme including name, version, description, 
+author, etc is retrieved from the themes functions.php and theme_config_foo 
+function. Take a look at the themes included with Geeklog for examples.

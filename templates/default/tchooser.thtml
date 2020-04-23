@@ -8,7 +8,7 @@
 <!-- BEGIN themeRow -->
   <tr>
 
-  <!-- BEGIN themeColumn -->
+<!-- BEGIN themeColumn -->
     <td style="vertical-align:top;{tdwidth}">
     {themeDisplay}
     </td>
