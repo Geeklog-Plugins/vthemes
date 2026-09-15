@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "id": "vthemes",
+  "name": "vthemes",
+  "icon": "public_html/vthemes.png",
+  "requires": {
+    "geeklog": "2.2.1"
+  }
+}
